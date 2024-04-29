@@ -1,0 +1,53 @@
+package team8_v3;
+
+import java.io.BufferedReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
+
+public class getLegoName extends Thread {
+	 URL url = null;
+		HttpURLConnection conn = null;
+		InputStreamReader isr = null;
+		BufferedReader br=null;
+		DataExchange de = new DataExchange();
+		String s=null;
+		
+		public getLegoName(DataExchange de) {
+			this.de = de;
+		}
+		@Override
+		public void run() {
+			//while(true) {
+				try {
+					url = new URL("http://192.168.0.15:8080/rest/lego/getlego");
+					conn = (HttpURLConnection)url.openConnection();
+		  			//System.out.println(conn.toString()); //Tulostaa vain URLin
+					InputStream is=null;
+					try {
+						is=conn.getInputStream();
+					}
+					catch (Exception e) {
+			  			System.out.println("Exception conn.getInputSteam()");
+			  			e.printStackTrace();
+			            System.out.println("Cannot get InputStream!");
+					}
+					isr = new InputStreamReader(is);
+		      		br=new BufferedReader(isr);
+					while ((s=br.readLine())!=null){
+						//System.out.println(s);
+						
+						de.setName(s);
+						
+					}
+					System.out.println(de.getName());
+					
+				}
+		  		catch(Exception e) {
+		  			e.printStackTrace();
+		            System.out.println("Some problem!");
+		  		}
+			}
+		//}
+}
