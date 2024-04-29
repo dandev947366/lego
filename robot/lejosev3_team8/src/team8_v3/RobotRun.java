@@ -12,11 +12,10 @@ public class RobotRun extends Thread {
 	EV3UltrasonicSensor us;
 	DataExchange de;
 	RobotDirection direction;
-	int speed;
+	RobotSpeed speed;
 	
 	public RobotRun(DataExchange de) {
 		this.de = de;
-		this.speed = 50;
 	}
 	public void run() {
 		while(true) {
@@ -24,23 +23,23 @@ public class RobotRun extends Thread {
 				if(de.getCmd()==1) {
 					//follow the line
 					if(de.getAct().equalsIgnoreCase("R")){	
-						motorA.setPower(speed/3);
-						motorD.setPower(speed);
+						motorA.setPower(de.getSpeed()/3);
+						motorD.setPower(de.getSpeed());
 						//Delay.msDelay(500);
 					}else if(de.getAct().equalsIgnoreCase("L")){
 						
-						motorA.setPower(speed);
-						motorD.setPower(speed/2);
+						motorA.setPower(de.getSpeed());
+						motorD.setPower(de.getSpeed()/2);
 						
 					}
 						else if(de.getAct().equalsIgnoreCase("G")){
-							motorA.setPower(speed);
-							motorD.setPower(speed);
+							motorA.setPower(de.getSpeed());
+							motorD.setPower(de.getSpeed());
 						}
 				}else if(de.getCmd()==0) {
 					
-					motorA.setPower((speed)/7);
-					motorD.setPower(speed);
+					motorA.setPower((de.getSpeed())/7);
+					motorD.setPower(de.getSpeed());
 					try {
 						Thread.sleep(2000);
 					} catch (InterruptedException e) {
@@ -50,17 +49,17 @@ public class RobotRun extends Thread {
 					//avoid the obstacle
 				} 
 			}else if(de.getDirection()==1) {//go straight
-					motorA.setPower(speed);
-					motorD.setPower(speed);
+					motorA.setPower(de.getSpeed());
+					motorD.setPower(de.getSpeed());
 				}else if(de.getDirection()==2) {//turn left
-					motorA.setPower(speed);
-					motorD.setPower((speed)/5);
+					motorA.setPower(de.getSpeed());
+					motorD.setPower((de.getSpeed())/5);
 				}else if(de.getDirection()==3) {//turn right
-					motorA.setPower((speed)/5);
-					motorD.setPower(speed);
+					motorA.setPower((de.getSpeed())/5);
+					motorD.setPower(de.getSpeed());
 				}else if(de.getDirection()==4) {//go back
-					motorA.setPower(-(speed));
-					motorD.setPower(-(speed));
+					motorA.setPower(-(de.getSpeed()));
+					motorD.setPower(-(de.getSpeed()));
 				}else{//stop
 					motorA.setPower(1);
 					motorD.setPower(1);

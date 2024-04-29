@@ -9,6 +9,23 @@ public class LejosEv3_Team8 {
         Button.waitForAnyPress();
         DataExchange de = new DataExchange();
 
+		// added by Xin Feng & Xiaomeng Du.
+		System.out.println("Name: " + HttpGet.getName());
+		
+		Statistic statistic = new Statistic(de);
+		try {
+            statistic.start();
+            try {
+    			Thread.sleep(1000);
+    		} catch (InterruptedException e) {
+    			e.printStackTrace();
+    		}
+		} catch (Exception e) {
+			System.out.println("direction err");
+		}
+		
+		// added end.
+
         try {
         	RobotDirection direction = new RobotDirection(de);
             direction.start();

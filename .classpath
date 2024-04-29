@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="src" path="robot/lejosev3_team8/src"/>
+	<classpathentry kind="src" path="webservice/Team8/src/main/java"/>
+	<classpathentry kind="src" path="webservice/Team8/src/test/java"/>
+	<classpathentry kind="lib" path="robot/lejosev3_team8/httptest.jar"/>
+	<classpathentry kind="lib" path="robot/lejosev3_team8/LejosEv3_Team8.jar"/>
+	<classpathentry kind="lib" path="robot/lejosev3_team8/MainLejosProject.jar"/>
+	<classpathentry kind="lib" path="robot/lejosev3_team8/Team8_V2.jar"/>
+	<classpathentry kind="lib" path="robot/lejosev3_team8/test.jar"/>
+	<classpathentry kind="output" path="robot/lejosev3_team8/bin"/>
+</classpath>
