@@ -5,6 +5,7 @@ public class DataExchange {
 	private int cmd = 1;
 	private String act = "G";
 	private int count = 0;
+	private int speed;
 	private int direction = 0;
 	private int id;
 	private String name;
@@ -47,7 +48,18 @@ public class DataExchange {
 		}
 		
 	}
-
+	public int getSpeed() {
+		synchronized(this) {
+			return speed;
+		}
+		
+	}
+	public void setSpeed(int speed) {
+		synchronized(this) {
+			this.speed = speed;
+		}
+		
+	}
 	public int getDirection() {
 		synchronized(this) {
 			return direction;
