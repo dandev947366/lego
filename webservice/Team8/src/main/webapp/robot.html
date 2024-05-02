@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Team 8 Web Service</title>
+<link
+	href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+	rel="stylesheet"
+	integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
+	crossorigin="anonymous">
+<link
+	href="https://fonts.googleapis.com/css?family=Roboto:400,700&display=swap"
+	rel="stylesheet">
+<style>
+body {
+	font-family: 'Roboto', sans-serif;
+	background-color: #f4f4f9;
+	color: #0056b3;
+}
+
+.container {
+	margin-top: 20px;
+}
+
+.flex-container {
+	display: flex;
+	justify-content: space-between;
+}
+
+.flex-container>div {
+	background: white;
+	flex: 1;
+	margin: 10px;
+	padding: 20px;
+	border-radius: 8px;
+	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.btn-custom {
+	color: #fff;
+	background-color: #0056b3;
+	border-color: #0056b3;
+}
+
+.btn-custom:active, .btn-custom:hover {
+	border-color: #0056b3;
+}
+</style>
+</head>
+<body>
+	<div class="container">
+		<h1>TEAM8 WEB SERVICE</h1>
+		<p class="fs-4">
+			Robot Name: <span id="name"></span>
+		</p>
+		<h2>Robot Management</h2>
+		<div class="flex-container">
+			<div>
+				<h4>Select Robot by Name</h4>
+				<form class="row row-cols-lg-auto g-3 align-items-center">
+					<div class="col-12">
+						<select id="robot-select" class="form-control"
+							onchange="updateCurrentRobotIdAndName()">
+							<option value="">Choose a Robot</option>
+						</select>
+					</div>
+					<div class="col-12">
+						<button class="btn btn-custom" onclick="fetchRobotInfo(event)">Submit</button>
+					</div>
+					<div class="col-12" id="robot-select-res"></div>
+				</form>
+			</div>
+			<div>
+				<h4>Update Robot Name</h4>
+				<form class="row row-cols-lg-auto g-3 align-items-center">
+					<div class="col-12">
+						<select id="update-robot-select" class="form-control"
+							onchange="updateNameField()">
+							<option value="">Choose a Robot</option>
+						</select>
+					</div>
+					<div class="col-12">
+						<input type="text" id="new-robot-name" class="form-control"
+							placeholder="New name">
+					</div>
+					<div class="col-12">
+						<button class="btn btn-custom" onclick="updateRobotName(event)">Submit</button>
+					</div>
+					<div class="col-12" id="update-robot-res"></div>
+				</form>
+			</div>
+			<div>
+				<h4>Create Robot</h4>
+				<form class="row row-cols-lg-auto g-3 align-items-center">
+					<div class="col-12">
+						<input type="text" id="new-robot" class="form-control"
+							placeholder="Enter new robot name">
+					</div>
+					<div class="col-12">
+						<button class="btn btn-custom" onclick="addNewRobot(event)">Create</button>
+					</div>
+					<div class="col-12" id="new-robot-res"></div>
+				</form>
+			</div>
+		</div>
+		<h2>Setting</h2>
+		<div class="flex-container">
+			<div>
+				<form class="row row-cols-lg-auto g-3 align-items-center">
+					<div class="col-12">
+						<input type="number" id="set-speed" class="form-control"
+							placeholder="Enter speed">
+					</div>
+					<div class="col-12">
+						<select id="set-direction" class="form-control">
+							<option value="">Choose a Command</option>
+							<option value="0">Line Robot</option>
+							<option value="1">Go Forward</option>
+							<option value="2">Turn Left</option>
+							<option value="3">Turn Right</option>
+							<option value="4">Go Backward</option>
+							<option value="5">Stop</option>
+						</select>
+					</div>
+					<div class="col-12">
+						<button class="btn btn-custom" onclick="setValues(event)">Set
+							Values</button>
+					</div>
+					<div class="col-12">
+						<button class="btn btn-custom" onclick="getSettings(event)">Get
+					Settings</button>
+					</div>
+					<div class="col-12" id="robot-set-res"></div>
+				</form>
+				<div>
+					<table class="table">
+						<thead>
+							<tr>
+								<th>Setting Id</th>
+								<th>Speed</th>
+								<th>Command</th>
+								<th>Time</th>
+							</tr>
+						</thead>
+						<tbody id="settings-list">
+						</tbody>
+					</table>
+				</div>
+			</div>
+		</div>
+		<h2>Statistics</h2>
+		<div>
+			<div class="mb-3">
+				<button class="btn btn-custom" onclick="getStatistics()">Get
+					Statistics</button>
+			</div>
+			<table class="table">
+				<thead>
+					<tr>
+						<th>Task ID</th>
+						<th>Average Speed</th>
+						<th>Start Time</th>
+						<th>Duration (Seconds)</th>
+					</tr>
+				</thead>
+				<tbody id="statistics-list">
+				</tbody>
+			</table>
+		</div>
+		<footer>
+			<h4 class="text-center">Team Members:</h4>
+			<div class="flex-container">
+				<div class="text-center">Dan</div>
+				<div class="text-center">Xiaomeng Du</div>
+				<div class="text-center">Hiep</div>
+				<div class="text-center">Xin Feng</div>
+			</div>
+		</footer>
+	</div>
+
+	<script
+		src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+		integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+		crossorigin="anonymous"></script>
+	<script>
+        var currentRobotId = null;
+        var currentRobotName = null;
+
+        function fetchRobots() {
+            const xhr = new XMLHttpRequest();
+            xhr.open('GET', '/rest/robotservice/getrobots');
+            xhr.onload = function() {
+                if (xhr.status === 200) {
+                    const robots = JSON.parse(xhr.responseText);
+                    const selects = [document.getElementById('robot-select'), document.getElementById('update-robot-select')];
+                    selects.forEach(select => {
+                        select.innerHTML = '<option value="">Choose a Robot</option>'; // Clear existing options
+                        robots.forEach(robot => {
+                            const option = new Option(robot.name, robot.id);
+                            select.appendChild(option);
+                        });
+                        document.getElementById('name').innerHTML = '';
+                    });
+                }
+            };
+            xhr.send();
+        }
+
+        function updateCurrentRobotIdAndName() {
+            const select = document.getElementById('robot-select');
+            currentRobotId = select.value;
+            currentRobotName = select.options[select.selectedIndex].text;
+        }
+
+        function fetchRobotInfo(event) {
+        	event.preventDefault(); 
+            if (!currentRobotId) return;
+            const xhr = new XMLHttpRequest();
+            xhr.open('GET', `/rest/robotservice/getrobot/${currentRobotId}`);
+            xhr.onload = function() {
+                if (xhr.status === 200) {
+                	document.getElementById('name').innerHTML = xhr.responseText;
+                	document.getElementById('robot-select-res').innerHTML = 'Done';
+                	document.getElementById('update-robot-res').innerHTML = '';
+                	document.getElementById('new-robot-res').innerHTML = '';
+                	document.getElementById('robot-set-res').innerHTML = '';
+                }
+            };
+            xhr.send();
+        }
+
+        function updateNameField() {
+            const select = document.getElementById('update-robot-select');
+            const nameField = document.getElementById('new-robot-name');
+            nameField.value = select.options[select.selectedIndex].text;
+        }
+
+        function updateRobotName(event) {
+        	event.preventDefault(); 
+            const robotId = document.getElementById('update-robot-select').value;
+            const newName = document.getElementById('new-robot-name').value;
+            const xhr = new XMLHttpRequest();
+            xhr.open('PUT', `/rest/robotservice/updaterobot/${robotId}`);
+            xhr.setRequestHeader('Content-Type', 'application/json');
+            xhr.onload = function() {
+                if (xhr.status === 200) {
+                	document.getElementById('robot-select-res').innerHTML = '';
+                	document.getElementById('update-robot-res').innerHTML = 'Done';
+                	document.getElementById('new-robot-res').innerHTML = '';
+                	document.getElementById('robot-set-res').innerHTML = '';
+                    fetchRobots();
+                }
+            };
+            xhr.send(JSON.stringify({name: newName}));
+        }
+
+        function addNewRobot(event) {
+        	event.preventDefault(); 
+            const name = document.getElementById('new-robot').value;
+            const xhr = new XMLHttpRequest();
+            xhr.open('POST', '/rest/robotservice/addrobot');
+            xhr.setRequestHeader('Content-Type', 'application/json');
+            xhr.onload = function() {
+                if (xhr.status === 200) {
+                	document.getElementById('robot-select-res').innerHTML = '';
+                	document.getElementById('update-robot-res').innerHTML = '';
+                	document.getElementById('new-robot-res').innerHTML = 'Done';
+                	document.getElementById('robot-set-res').innerHTML = '';
+                    fetchRobots();
+                }
+            };
+            xhr.send(JSON.stringify({name}));
+        }
+
+        function setValues(event) {
+        	event.preventDefault(); 
+            const speed = document.getElementById('set-speed').value;
+            const direction = document.getElementById('set-direction').value;
+            const xhr = new XMLHttpRequest();
+            xhr.open('POST', '/rest/lego/setvalues');
+            xhr.setRequestHeader('Content-Type', 'application/json');
+            xhr.onload = function() {
+                if (xhr.status === 200) {
+                	document.getElementById('robot-select-res').innerHTML = '';
+                	document.getElementById('update-robot-res').innerHTML = '';
+                	document.getElementById('new-robot-res').innerHTML = '';
+                	document.getElementById('robot-set-res').innerHTML = 'Done';
+                }
+            };
+            xhr.send(JSON.stringify({speed: speed, direction: direction}));
+        }
+
+        function getStatistics() {
+            if (!currentRobotId) {
+            	alert('Select a robot first');
+            	return;
+            }
+        	document.getElementById('robot-select-res').innerHTML = '';
+        	document.getElementById('update-robot-res').innerHTML = '';
+        	document.getElementById('new-robot-res').innerHTML = '';
+        	document.getElementById('robot-set-res').innerHTML = '';
+            const xhr = new XMLHttpRequest();
+            xhr.open('GET', `/rest/taskservice/gettasks/${currentRobotId}`);
+            xhr.onload = function() {
+                if (xhr.status === 200) {
+                    const tasks = JSON.parse(xhr.responseText);
+                    const tbody = document.getElementById('statistics-list');
+                    tbody.innerHTML = '';
+                    tasks.forEach(task => {
+                        const startDate = new Date(task.startTimeStamp);
+                        const endDate = new Date(task.endTimeStamp);
+                        const duration = (endDate - startDate) / 1000;
+                        const row = `<tr>
+                            <td>${task.id}</td>
+                            <td>${task.avgSpeed}</td>
+                            <td>${startDate.toLocaleString()}</td>
+                            <td>${duration}</td>
+                        </tr>`;
+                        tbody.innerHTML += row;
+                    });
+                }
+            };
+            xhr.send();
+        }
+
+		function getSettings(event) {
+			event.preventDefault();
+        	document.getElementById('robot-select-res').innerHTML = '';
+        	document.getElementById('update-robot-res').innerHTML = '';
+        	document.getElementById('new-robot-res').innerHTML = '';
+        	document.getElementById('robot-set-res').innerHTML = '';
+            const xhr = new XMLHttpRequest();
+            xhr.open('GET', `/rest/lego/getallvalues`);
+            xhr.onload = function() {
+                if (xhr.status === 200) {
+                    const settings = JSON.parse(xhr.responseText);
+                    const tbody = document.getElementById('settings-list');
+                    tbody.innerHTML = '';
+                    settings.forEach(setting => {
+                        const time = new Date(setting.time);
+                        const row = `<tr>
+                            <td>${setting.id}</td>
+                            <td>${setting.speed}</td>
+                            <td>${setting.direction}</td>
+                            <td>${time.toLocaleString()}</td>
+                        </tr>`;
+                        tbody.innerHTML += row;
+                    });
+                }
+            };
+            xhr.send();
+        }
+
+        document.addEventListener('DOMContentLoaded', fetchRobots);
+    </script>
+</body>
+</html>
